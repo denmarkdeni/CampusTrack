@@ -1,0 +1,92 @@
+{% extends 'base.html' %} {% block content %}
+
+<form method="POST" enctype="multipart/form-data" action="{% url 'student_profile' %}">
+    {% csrf_token %}
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+        <div class="col-sm-6 col-xl-10">
+            <div class="bg-secondary rounded h-100 p-4 md-19">
+            <h6 class="mb-4 text-center">Student Profile Form</h6>
+
+            <!-- Personal Details -->
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingName" name="full_name" placeholder="hlo" value="{{ profile.full_name }}">
+                <label for="floatingName">Full Name</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingEmail" placeholder="hlo" value="{{ user.email }}">
+                <label for="floatingEmail">Email</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingPhone" name="phone" placeholder="hlo" value="{{ profile.phone }}">
+                <label for="floatingPhone">Phone Number</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="date" class="form-control" id="floatingDob" name="dob" placeholder="hlo" value="{{ profile.dob|date:'Y-m-d' }}">
+                <label for="floatingDob">Date of Birth</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <select class="form-select" id="floatingGender" name="gender">
+                <option value="Male" {% if profile.gender == "Male" %}selected{% endif %}>Male</option>
+                <option value="Female" {% if profile.gender == "Female" %}selected{% endif %}>Female</option>
+                <option value="Other" {% if profile.gender == "Other" %}selected{% endif %}>Other</option>
+                </select>
+                <label for="floatingGender">Gender</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea class="form-control" placeholder="Address" id="floatingAddress" name="address" placeholder="hlo" style="height: 100px">{{ profile.address }}</textarea>
+                <label for="floatingAddress">Address</label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-light" for="floatingFile">Profile Picture</label>
+                <input class="form-control bg-dark text-white" type="file" id="floatingFile" name="profile_pic">
+            </div>
+
+            <hr class="text-light">
+
+            <!-- Academic Details -->
+            <h6 class="mb-3 text-center">Academic Details</h6>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingCourse" name="course" placeholder="hlo" value="{{ profile.course }}">
+                <label for="floatingCourse">Course</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingYear" name="year" placeholder="hlo" value="{{ profile.year }}">
+                <label for="floatingYear">Year of Study</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingRoll" name="roll_number" placeholder="hlo" value="{{ profile.roll_number }}">
+                <label for="floatingRoll">Roll Number</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingDept" name="department" placeholder="hlo" value="{{ profile.department }}">
+                <label for="floatingDept">Department</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingBatch" name="batch" placeholder="hlo" value="{{ profile.batch }}">
+                <label for="floatingBatch">Batch</label>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary px-4">Update Profile</button>
+            </div>
+
+            </div>
+        </div>
+        </div>
+    </div>
+</form>
+  
+
+{% endblock %}

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Campus Track Login</title>
+    <title>Campus Track Register</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -44,7 +44,7 @@
 
         <!-- Sign Up Start -->
         <div class="container-fluid">
-            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;"> 
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                     <form method="post" class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         {% csrf_token %}
@@ -67,7 +67,7 @@
                             <label for="floatingPassword">Password</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <select class="form-select" name="role" id="floatingSelect" aria-label="Floating label select example">
+                            <select class="form-select" name="role" id="floatingSelect" placeholder="role" aria-label="Floating label select example">
                                 <option value="student">Student</option>
                                 <option value="teacher">Teacher</option>
                             </select>
