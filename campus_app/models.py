@@ -48,3 +48,61 @@ class TeacherProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class Degree(models.Model):
+    name = models.CharField(max_length=100)  # e.g. BSc, B.Tech
+    duration_years = models.IntegerField()
+    total_semesters = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+
+class Department(models.Model):
+    name = models.CharField(max_length=100)  # e.g. Computer Science
+    def __str__(self):
+        return self.name
+
+
+class Course(models.Model):
+    course_code = models.CharField(max_length=10, unique=True)
+    course_name = models.CharField(max_length=100)
+
+    degree = models.ForeignKey(Degree, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+
+    semester = models.IntegerField()
+    year = models.IntegerField()
+
+    teacher = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'account__role': 'teacher'}
+    )
+
+    def __str__(self):
+        return f"{self.course_code} - {self.course_name}"
+
+class Enrollment(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    academic_year = models.CharField(max_length=9)  # Example: '2024-2025'
+    status = models.CharField(max_length=20, choices=[('enrolled', 'Enrolled'), ('completed', 'Completed'), ('dropped', 'Dropped')], default='enrolled')
+    date_enrolled = models.DateField(auto_now_add=True)
+    date_completed = models.DateField(null=True, blank=True)
+    date_dropped = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.student.username} enrolled in {self.course.course_name}"
+
+class Mark(models.Model):
+    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+    year = models.IntegerField()
+    semester = models.IntegerField()
+    internal_marks = models.FloatField()
+    external_marks = models.FloatField()
+    grade = models.CharField(max_length=2)  # A, B, C etc.
+
+    def __str__(self):
+        return f"{self.enrollment.student.username} - {self.grade}"
