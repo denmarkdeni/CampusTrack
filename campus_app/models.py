@@ -60,6 +60,10 @@ class Degree(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=100)  # e.g. Computer Science
+    degree = models.ForeignKey(Degree, on_delete=models.CASCADE, related_name='departments')
+    description = models.TextField(blank=True)
+    subjects = models.IntegerField(default=0)  
+
     def __str__(self):
         return self.name
 
@@ -85,8 +89,12 @@ class Course(models.Model):
         return f"{self.course_code} - {self.course_name}"
 
 class Enrollment(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        limit_choices_to={'account__role': 'student'}
+    )
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
     academic_year = models.CharField(max_length=9)  # Example: '2024-2025'
     status = models.CharField(max_length=20, choices=[('enrolled', 'Enrolled'), ('completed', 'Completed'), ('dropped', 'Dropped')], default='enrolled')
     date_enrolled = models.DateField(auto_now_add=True)

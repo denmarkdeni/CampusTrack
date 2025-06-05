@@ -32,8 +32,16 @@ urlpatterns = [
     path('dashboard/teacher/', views.teacher_dashboard, name='teacher_dashboard'),
     path('dashboard/student/', views.student_dashboard, name='student_dashboard'),
 
-    path('dashboard/student/profile', views.student_profile, name='student_profile'),
-    path('dashboard/teacher/profile', views.teacher_profile, name='teacher_profile'),
+    path('dashboard/profile/', views.profile, name='profile'),
+    path('dashboard/student/profile/', views.student_profile, name='student_profile'),
+    path('dashboard/teacher/profile/', views.teacher_profile, name='teacher_profile'),
+
+    path('course/add/', views.add_course, name='add_course'),
+    path('course/list/', views.course_list, name='course_list'),
+    path('course/all/', views.all_courses, name='all_courses'),
+    path('course/Student/list', views.student_course_list, name='student_course_list'),
+    path('course/details/<int:dep_id>', views.course_details, name='course_details'),
+    path('course/enroll/<int:dep_id>/', views.course_enrollment, name='course_enrollment'),
 ]
 
 if settings.DEBUG:

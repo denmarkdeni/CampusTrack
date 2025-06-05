@@ -3,7 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Account, StudentProfile, TeacherProfile
+from .models import Account, StudentProfile, TeacherProfile, Degree, Department, Course , Enrollment
+from datetime import datetime
 
 def home(request):
     return render(request, 'home.html')
@@ -71,6 +72,15 @@ def teacher_dashboard(request):
     
 def student_dashboard(request):
     return render(request, 'dashboard/student_dashboard.html')
+
+def profile(request):
+    if request.user.is_authenticated:
+        if request.user.account.role == 'student':
+            return redirect('student_profile')
+        elif request.user.account.role == 'teacher':
+            return redirect('teacher_profile')
+    else:
+        return redirect('login')
     
 @login_required
 def student_profile(request):
@@ -125,3 +135,96 @@ def teacher_profile(request):
         return redirect('teacher_profile')  
 
     return render(request, 'profile/teacher_profile.html', {'profile': profile})
+
+@login_required
+def add_course(request):
+    if request.method == 'POST':
+        course_code = request.POST['course_code']
+        course_name = request.POST['course_name']
+        degree_id = request.POST['degree_id']
+        department_id = request.POST['department_id']
+        semester = request.POST['semester']
+        year = request.POST['year']
+        teacher_id = request.POST.get('teacher_id')
+
+        degree = Degree.objects.get(id=degree_id)
+        department = Department.objects.get(id=department_id)
+        teacher = User.objects.get(id=teacher_id) if teacher_id else None
+
+        Course.objects.create(
+            course_code=course_code,
+            course_name=course_name,
+            degree=degree,
+            department=department,
+            semester=semester,
+            year=year,
+            teacher=teacher
+        )
+
+        messages.success(request, 'Course added successfully!')
+        return redirect('add_course')
+
+    degrees = Degree.objects.all()
+    departments = Department.objects.all()
+    teachers = User.objects.filter(account__role='teacher')
+
+    return render(request, 'course/course_add.html', {
+        'degrees': degrees,
+        'departments': departments,
+        'teachers': teachers
+    })
+
+def course_list(request):
+    courses = Course.objects.all()
+    return render(request, 'course/course_list.html', {'courses': courses})
+
+def all_courses(request):
+    departments = Department.objects.all().order_by('name')
+    return render(request, 'course/all_courses.html', {'departments': departments})
+
+def student_course_list(request):
+    enrollments = Enrollment.objects.filter(student=request.user)
+    return render(request, 'course/student_course_list.html', {'enrollments': enrollments})
+
+def course_details(request, dep_id):
+    department = Department.objects.get(id=dep_id)
+    courses = Course.objects.filter(department=department).order_by('course_code')
+    IsEnrolled = Enrollment.objects.filter(student=request.user, department=department).exists()
+
+    if not IsEnrolled:
+        return redirect('course_enrollment', dep_id=dep_id)
+    
+    if not courses:
+        messages.warning(request, 'No courses found for this department.')
+    
+    return render(request, 'course/course_details.html', {
+        'department': department,
+        'courses': courses
+    })
+
+def course_enrollment(request, dep_id):
+    department = Department.objects.get(id=dep_id)
+    courses = Course.objects.filter(department=department).order_by('course_code')
+    current = datetime.now()
+    academic_year = f"{current.year}-{current.year + department.degree.duration_years }" 
+    total_subjects = Course.objects.filter(department=department).count()
+    
+    if request.method == 'POST':
+
+        Enrollment.objects.create(
+            student=request.user,
+            department=department,
+            academic_year=academic_year
+        )
+        
+        messages.success(request, 'Courses enrolled successfully!')
+        return redirect('student_dashboard')
+
+    return render(request, 'course/course_enrollment.html', {
+        'department': department,
+        'courses': courses,
+        'academic_year': academic_year,
+        'total_subjects': total_subjects
+    })
+
+

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form method="POST" action="{% url 'add_course' %}">
+    {% csrf_token %}
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-6 col-xl-12">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4 text-center">Add New Course</h6>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingCode" name="course_code" placeholder="Course Code" required>
+                        <label for="floatingCode">Course Code</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingName" name="course_name" placeholder="Course Name" required>
+                        <label for="floatingName">Course Name</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="floatingDegree" name="degree_id" required>
+                            <option disabled selected hidden>Select Degree</option>
+                            {% for degree in degrees %}
+                                <option value="{{ degree.id }}">{{ degree.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="floatingDegree">Degree</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="floatingDepartment" name="department_id" required>
+                            <option disabled selected hidden>Select Department</option>
+                            {% for dept in departments %}
+                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="floatingDepartment">Department</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingSemester" name="semester" placeholder="Semester" required>
+                        <label for="floatingSemester">Semester</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingYear" name="year" placeholder="Year" required>
+                        <label for="floatingYear">Year</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="floatingTeacher" name="teacher_id">
+                            <option disabled selected hidden>Select Teacher</option>
+                            {% for teacher in teachers %}
+                                <option value="{{ teacher.id }}">{{ teacher.teacherprofile.full_name }} ({{teacher.teacherprofile.designation}}) </option>
+                            {% endfor %}
+                        </select>
+                        <label for="floatingTeacher">Teacher</label>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary px-4">Add Course</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

@@ -82,6 +82,9 @@
     background: var(--dark);
     transition: 0.5s;
 }
+.ml-0{
+    margin:0;
+}
 
 @media (min-width: 992px) {
     .sidebar {
