@@ -32,6 +32,16 @@ urlpatterns = [
     path('dashboard/teacher/', views.teacher_dashboard, name='teacher_dashboard'),
     path('dashboard/student/', views.student_dashboard, name='student_dashboard'),
 
+    path('user-management/', views.user_management, name='user_management'),
+    path('approve-user/<int:user_id>/', views.approve_user, name='approve_user'),
+    path('remove-user/<int:user_id>/', views.remove_user, name='remove_user'),
+
+    path('course-management/', views.course_management, name='course_management'),
+    path('remove-course/<int:course_id>/', views.remove_course, name='remove_course'),
+
+    path('enrollment-management/', views.enrollment_management, name='enrollment_management'),
+    path('remove-enrollment/<int:enrollment_id>/', views.remove_enrollment, name='remove_enrollment'),
+
     path('dashboard/profile/', views.profile, name='profile'),
     path('dashboard/student/profile/', views.student_profile, name='student_profile'),
     path('dashboard/teacher/profile/', views.teacher_profile, name='teacher_profile'),

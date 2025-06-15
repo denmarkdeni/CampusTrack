@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">User Management</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col">/</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if accounts %}
+                        {% for account in accounts %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ account.user.username }}</td>
+                            <td>{{ account.role|capfirst }}</td>
+                            <td>
+                                {% if account.role == 'student' %}
+                                    {{ account.user.studentprofile.full_name }}
+                                {% else %}
+                                    {{ account.user.teacherprofile.full_name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if account.role == 'student' %}
+                                    {{ account.user.studentprofile.department }}
+                                {% else %}
+                                    {{ account.user.teacherprofile.department }}
+                                {% endif %}
+                            </td>
+                            <td>{{ account.user.is_active|yesno:"Active,Inactive" }}</td>
+                            <td>
+                                {% if not account.user.is_active %}
+                                    <a class="btn btn-sm btn-success" href="{% url 'approve_user' account.user.id %}">Approve</a>
+                                {% endif %}
+                                <a class="btn btn-sm btn-danger" href="{% url 'remove_user' account.user.id %}">Remove</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">No Users Found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -7,19 +7,19 @@
         <div class="row g-4">
             <div class="col-sm-6 col-xl-3">
                 <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                    <i class="fa fa-chart-line fa-3x text-primary"></i>
+                    <i class="fa fa-user fa-3x text-primary"></i>
                     <div class="ms-3">
                         <p class="mb-2">Total Students</p>
-                        <h6 class="mb-0">10000+</h6>
+                        <h6 class="mb-0"> {{ total_students }} </h6>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-xl-3">
                 <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                    <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                    <i class="fa fa-chalkboard-teacher fa-3x text-primary"></i>
                     <div class="ms-3">
                         <p class="mb-2">Total Teachers</p>
-                        <h6 class="mb-0">200+</h6>
+                        <h6 class="mb-0"> {{ total_teachers }} </h6>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <i class="fa fa-chart-area fa-3x text-primary"></i>
                     <div class="ms-3">
                         <p class="mb-2"> Cultural Events</p>
-                        <h6 class="mb-0">100+</h6>
+                        <h6 class="mb-0">{{ cultural_events }}</h6>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     <i class="fa fa-chart-pie fa-3x text-primary"></i>
                     <div class="ms-3">
                         <p class="mb-2">Total Courses</p>
-                        <h6 class="mb-0">200+</h6>
+                        <h6 class="mb-0">{{ total_courses }}</h6>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-secondary text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Student Traffic</h6>
+                        <h6 class="mb-0">Students Performance</h6>
                         <a href="">Show All</a>
                     </div>
                     <canvas id="worldwide-sales"></canvas>
@@ -83,61 +83,31 @@
                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                         <tr class="text-white">
-                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                            <th scope="col">/</th>
                             <th scope="col">Date</th>
-                            <th scope="col">Invoice</th>
-                            <th scope="col">Customer</th>
-                            <th scope="col">Amount</th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Student</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% if enrollments %}
+                            {% for enroll in enrollments %}
+                            <tr>
+                                <td> {{ forloop.counter1 }} </td>
+                                <td>{{ enroll.date_enrolled }}</td>
+                                <td>{{ enroll.department.name }}</td>
+                                <td>{{ enroll.student.username }} </td>
+                                <td>{{ enroll.status }}</td>
+                                <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
                         <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>01 Jan 2025</td>
-                            <td>INV-9123</td>
-                            <td>Kevin </td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
+                            <td colspan="6" class="text-center">No Recent Admissions</td>
                         </tr>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>09 Mar 2024</td>
-                            <td>INV-2113</td>
-                            <td>Jacob Dye</td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>28 Aug 2025</td>
-                            <td>INV-3231</td>
-                            <td>Adam Rose</td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>07 Jun 2025</td>
-                            <td>INV-6597</td>
-                            <td>Lilly</td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>06 Dec 2025</td>
-                            <td>INV-0123</td>
-                            <td>Benny Ray</td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>

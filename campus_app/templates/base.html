@@ -71,9 +71,10 @@
                             <a href="element.html" class="dropdown-item">Other Elements</a>
                         </div> 
                     </div> -->
-                    <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users</a>
-                    <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Courses</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Culturals</a>
+                    <a href="{% url 'user_management' %}" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Users</a>
+                    <a href="{% url 'course_management' %}" class="nav-item nav-link"><i class="fa fa-book me-2"></i>Courses</a>
+                    <a href="{% url 'enrollment_management' %}" class="nav-item nav-link"><i class="fa fa-university me-2"></i>Enrollments</a>
+                    <a href="{% url 'dashboard' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Culturals</a>
                      <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a> -->
                     <!-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
@@ -125,7 +126,7 @@
         <div class="content">
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                <a href="{% url 'profile' %}" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
                 </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
@@ -141,7 +142,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     <p>{{ message }}</p> 
                     </div>
-                    
                 
                     <script>
                         setTimeout(function () {

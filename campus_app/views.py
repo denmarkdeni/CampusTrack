@@ -65,7 +65,15 @@ def dashboard(request):
         return redirect('register')  
     
 def admin_dashboard(request):
-    return render(request, 'dashboard/admin_dashboard.html')
+
+    context = {
+        "total_students":Account.objects.filter(role="student").count(),
+        "total_teachers":Account.objects.filter(role="teacher").count(),
+        "total_courses":Course.objects.all().count(),
+        "cultural_events":100,
+        "enrollments":Enrollment.objects.all().order_by('-date_enrolled')[:5],
+    }
+    return render(request, 'dashboard/admin_dashboard.html', context)
     
 def teacher_dashboard(request):
     return render(request, 'dashboard/teacher_dashboard.html')
@@ -227,4 +235,42 @@ def course_enrollment(request, dep_id):
         'total_subjects': total_subjects
     })
 
+@login_required
+def user_management(request):
+    accounts = Account.objects.all()
+    return render(request, 'admin/user_management.html', {'accounts': accounts})
 
+@login_required
+def approve_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.is_active = True
+    user.save()
+    return redirect('user_management')
+
+@login_required
+def remove_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return redirect('user_management')
+
+@login_required
+def course_management(request):
+    courses = Course.objects.all()
+    return render(request, 'admin/course_management.html', {'courses': courses})
+
+@login_required
+def remove_course(request, course_id):
+    course = Course.objects.get(id=course_id)
+    course.delete()
+    return redirect('course_management')
+
+@login_required
+def enrollment_management(request):
+    enrollments = Enrollment.objects.all()
+    return render(request, 'admin/enrollment_management.html', {'enrollments': enrollments})
+
+@login_required
+def remove_enrollment(request, enrollment_id):
+    enrollment = Enrollment.objects.get(id=enrollment_id)
+    enrollment.delete()
+    return redirect('enrollment_management')

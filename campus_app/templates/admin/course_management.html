@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Course Management</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col">/</th>
+                        <th scope="col">Course Code</th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">Degree</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Semester</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Teacher</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if courses %}
+                        {% for course in courses %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ course.course_code }}</td>
+                            <td>{{ course.course_name }}</td>
+                            <td>{{ course.degree.name }}</td>
+                            <td>{{ course.department.name }}</td>
+                            <td>{{ course.semester }}</td>
+                            <td>{{ course.year }}</td>
+                            <td>{{ course.teacher.username|default:"None" }}</td>
+                            <td><a class="btn btn-sm btn-danger" href="{% url 'remove_course' course.id %}">Remove</a></td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="9" class="text-center">No Courses Found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}  
