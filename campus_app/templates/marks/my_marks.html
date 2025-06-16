@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">My Marks</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col">/</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Semester</th>
+                        <th scope="col">Internal Marks</th>
+                        <th scope="col">External Marks</th>
+                        <th scope="col">Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if marks %}
+                        {% for mark in marks %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ mark.enrollment.department.name }}</td>
+                            <td>{{ mark.year }}</td>
+                            <td>{{ mark.semester }}</td>
+                            <td>{{ mark.internal_marks }}</td>
+                            <td>{{ mark.external_marks }}</td>
+                            <td>{{ mark.grade }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">No Marks Found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

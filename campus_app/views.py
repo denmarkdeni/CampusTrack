@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Account, StudentProfile, TeacherProfile, Degree, Department, Course , Enrollment
+from .models import Account, StudentProfile, TeacherProfile, Degree, Department, Course , Enrollment, Mark
 from datetime import datetime
 
 def home(request):
@@ -274,3 +274,33 @@ def remove_enrollment(request, enrollment_id):
     enrollment = Enrollment.objects.get(id=enrollment_id)
     enrollment.delete()
     return redirect('enrollment_management')
+
+@login_required
+def marks_upload(request):
+    enrollments = Enrollment.objects.filter(status='enrolled')
+    return render(request, 'marks/marks_upload.html', {'enrollments': enrollments})
+
+@login_required
+def upload_marks(request, enrollment_id):
+    if request.method == 'POST':
+        enrollment = Enrollment.objects.get(id=enrollment_id)
+        Mark.objects.create(
+            enrollment=enrollment,
+            year=request.POST['year'],
+            semester=request.POST['semester'],
+            internal_marks=request.POST['internal_marks'],
+            external_marks=request.POST['external_marks'],
+            grade=request.POST['grade']
+        )
+        return redirect('marks_upload')
+    return redirect('marks_upload')
+
+@login_required
+def all_marks(request):
+    marks = Mark.objects.all()
+    return render(request, 'marks/all_marks.html', {'marks': marks})
+
+@login_required
+def my_marks(request):
+    marks = Mark.objects.filter(enrollment__student=request.user).order_by('semester')
+    return render(request, 'marks/my_marks.html', {'marks': marks})

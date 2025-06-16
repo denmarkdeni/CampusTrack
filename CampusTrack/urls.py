@@ -52,6 +52,11 @@ urlpatterns = [
     path('course/Student/list', views.student_course_list, name='student_course_list'),
     path('course/details/<int:dep_id>', views.course_details, name='course_details'),
     path('course/enroll/<int:dep_id>/', views.course_enrollment, name='course_enrollment'),
+
+    path('teacher/marks-upload/', views.marks_upload, name='marks_upload'),
+    path('teacher/upload-marks/<int:enrollment_id>/', views.upload_marks, name='upload_marks'),
+    path('teacher/all-marks/', views.all_marks, name='all_marks'),
+    path('student/my-marks/', views.my_marks, name='my_marks'),
 ]
 
 if settings.DEBUG:

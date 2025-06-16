@@ -27,7 +27,7 @@
                   <td>{{ enrollment.department.name }}</td>
                   <td>{{ enrollment.academic_year }}</td>
                   <td>{{ enrollment.department.degree.total_semesters }}</td>
-                  <td><a href="{% url 'course_details' enrollment.id %}" class="btn btn-primary">View</a></td>
+                  <td><a href="{% url 'course_details' enrollment.department.id %}" class="btn btn-primary">View</a></td>
                 </tr>
                 {% endfor %}        
               </tbody>

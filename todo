@@ -1,0 +1,36 @@
+
+🧑‍🎓 Student Zone
+
+| Page                     | Purpose                             |
+| ------------------------ | ----------------------------------- |
+| `/student/profile/`      | View and update profile             |
+| `/student/enrollments/`  | View enrolled courses               |
+| `/student/marks/`        | Marks & grades                      |
+| `/student/cultural/`     | View & register for cultural events | 
+| `/student/projects/`     | View & submit lab/project work      |
+| `/student/achievements/` | Showcase certificates & recognition |
+| `/student/dashboard/`    | Overview of academics + activities  |
+
+👩‍🏫 Teacher Zone
+
+| Page                             | Purpose                                 |
+| -------------------------------- | --------------------------------------- |
+| `/teacher/courses/`              | Courses handled                         |
+| `/teacher/students/<course_id>/` | Students in a course                    |
+| `/teacher/marks/upload/`         | Add marks for students                  |
+| `/teacher/projects/manage/`      | View + evaluate lab/project submissions |
+| `/teacher/events/evaluate/`      | Judge events or view participation      |
+| `/teacher/profile/`              | View/update personal info               |
+
+🧑‍💼 Admin Zone
+
+| Page                      | Purpose                                    |
+| ------------------------- | ------------------------------------------ |
+| `/admin/dashboard/`       | Full system overview                       |
+| `/admin/degrees/add/`     | Add degrees                                |
+| `/admin/departments/add/` | Add departments                            |
+| `/admin/courses/add/`     | Add courses                                |
+| `/admin/users/manage/`    | Manage students & teachers                 |
+| `/admin/events/create/`   | Create cultural events (fests, debates)    |
+| `/admin/projects/create/` | Create project slots per course            |
+| `/admin/reports/`         | View analytics (pass %, top scorers, etc.) |

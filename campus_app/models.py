@@ -114,3 +114,31 @@ class Mark(models.Model):
 
     def __str__(self):
         return f"{self.enrollment.student.username} - {self.grade}"
+
+class Project(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    assigned_date = models.DateField()
+    due_date = models.DateField()
+    submitted_by = models.ManyToManyField(User, through='Submission')
+
+class Submission(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='projects/')
+    remarks = models.TextField(blank=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+class CulturalEvent(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    date = models.DateField()
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+class EventParticipation(models.Model):
+    event = models.ForeignKey(CulturalEvent, on_delete=models.CASCADE)
+    participant = models.ForeignKey(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=50, choices=[('Performer', 'Performer'), ('Volunteer', 'Volunteer')])
+    feedback = models.TextField(blank=True)

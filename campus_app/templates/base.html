@@ -89,26 +89,33 @@
                     {% elif request.user.account.role == 'teacher' %}
 
                     <a href="{% url 'teacher_profile' %}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Profile</a>
-                    {% comment %} <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Course </a> {% endcomment %}
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Course</a>
-                         <div class="dropdown-menu bg-transparent border-0"> 
-                            <a href="{% url 'add_course' %}" class="dropdown-item">Add Course</a>
-                            <a href="{% url 'course_list' %}" class="dropdown-item">Course List</a>
+                        <div class="dropdown-menu bg-transparent border-0"> 
+                            <a href="{% url 'add_course' %}" class="dropdown-item">💨 Add Course</a>
+                            <a href="{% url 'course_list' %}" class="dropdown-item">💨 Course List</a>
                         </div>
                     </div>
-                    <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Valuation</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-table me-2"></i>Evaluation</a>
+                        <div class="dropdown-menu bg-transparent border-0"> 
+                            <a href="{% url 'marks_upload' %}" class="dropdown-item">💨 Upload Marks</a>
+                            <a href="{% url 'all_marks' %}" class="dropdown-item">💨 marks List</a>
+                        </div>
+                    </div>
                     <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Feedback</a> 
-
+                    {% comment %} <a href="{% url 'marks_upload' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Valuation</a> {% endcomment %}
+                    {% comment %} <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Course </a> {% endcomment %}
+                    
                     {% elif request.user.account.role == 'student' %}
 
                     <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Profile </a>
-                    {% comment %} <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Courses </a> {% endcomment %}
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Course</a>
                          <div class="dropdown-menu bg-transparent border-0"> 
                             <a href="{% url 'student_course_list' %}" class="dropdown-item">My Courses</a>
                             <a href="{% url 'all_courses' %}" class="dropdown-item">All Courses</a>
+                            <a href="{% url 'my_marks' %}" class="dropdown-item">My Marks</a>
                         </div>
                     </div>
                     <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Cultural Events </a>
@@ -224,9 +231,11 @@
                             <span class="d-none d-lg-inline-flex">{{ request.user.username }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            {% if not request.user.is_superuser %}
                             <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
-                            <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+                            {% endif %}
+                            {% comment %} <a href="#" class="dropdown-item">Settings</a> {% endcomment %}
+                            <a href="{% url 'logout' %}" class="dropdown-item text-danger">Log Out</a>
                         </div>
                     </div>
                 </div>
