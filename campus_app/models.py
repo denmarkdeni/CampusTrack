@@ -133,12 +133,37 @@ class Submission(models.Model):
 class CulturalEvent(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    date = models.DateField()
+    start_date = models.DateField()
+    end_date = models.DateField()
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return self.name
+
 class EventParticipation(models.Model):
+    STATUS_CHOICES = [
+        ('Participated', 'Participated'),
+        ('Won', 'Won'),
+        ('Defeated', 'Defeated'),
+    ]
+    
     event = models.ForeignKey(CulturalEvent, on_delete=models.CASCADE)
     participant = models.ForeignKey(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, choices=[('Performer', 'Performer'), ('Volunteer', 'Volunteer')])
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Participated')
     feedback = models.TextField(blank=True)
+    certificate = models.FileField(upload_to='certificates/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.participant.username} - {self.event.name}"
+
+class Feedback(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'account__role': 'student'})
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    comments = models.TextField()
+    rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])  # 1 to 5 rating
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.username} - {self.course.course_name} Feedback"

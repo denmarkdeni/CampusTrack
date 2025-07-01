@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">{{ department.name }} Details</h6>
+            <a href="{% url 'home' %}">Back to Home</a>
+        </div>
+        <div class="text-start">
+            <h4>{{ department.name }}</h4>
+            <p><strong>Degree:</strong> {{ department.degree.name }}</p>
+            <p><strong>Subjects:</strong> {{ department.subjects }}</p>
+            <p><strong>Description:</strong> {{ department.description|default:"No description available" }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

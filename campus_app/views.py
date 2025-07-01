@@ -3,11 +3,30 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Account, StudentProfile, TeacherProfile, Degree, Department, Course , Enrollment, Mark
+from .models import Account, StudentProfile, TeacherProfile, Degree, Department, Feedback
+from .models import Course , Enrollment, Mark, Project, Submission, CulturalEvent, EventParticipation
 from datetime import datetime
+from django.utils import timezone
+from django.core.files.base import ContentFile
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 def home(request):
-    return render(request, 'home.html')
+    context = {
+        "students":Account.objects.filter(role="student").count(),
+        "teachers":Account.objects.filter(role="teacher").count(),
+        "courses":Course.objects.all().count(),
+        "culturals": CulturalEvent.objects.all().count(),
+        "departments": Department.objects.all()[:6],
+        "teachers_list": TeacherProfile.objects.all(),
+        "feedback":Feedback.objects.all().order_by('-created_at')[:5],
+    }
+    return render(request, 'home.html', context)
+
+def department_detail(request, department_id):
+    department = Department.objects.get(id=department_id)
+    return render(request, 'course/department_detail.html', {'department': department})
 
 def register(request):
     if request.method == 'POST':
@@ -70,16 +89,42 @@ def admin_dashboard(request):
         "total_students":Account.objects.filter(role="student").count(),
         "total_teachers":Account.objects.filter(role="teacher").count(),
         "total_courses":Course.objects.all().count(),
-        "cultural_events":100,
+        "cultural_events": CulturalEvent.objects.all().count(),
         "enrollments":Enrollment.objects.all().order_by('-date_enrolled')[:5],
     }
     return render(request, 'dashboard/admin_dashboard.html', context)
     
 def teacher_dashboard(request):
-    return render(request, 'dashboard/teacher_dashboard.html')
+    context = {
+        "total_students":Account.objects.filter(role="student").count(),
+        "marks_reviewed": Mark.objects.all().count(),
+        "total_courses":Course.objects.all().count(),
+        "cultural_events": CulturalEvent.objects.all().count(),
+        "enrollments":Enrollment.objects.all().order_by('-date_enrolled')[:5],
+    }
+    return render(request, 'dashboard/teacher_dashboard.html', context)
     
+@login_required
 def student_dashboard(request):
-    return render(request, 'dashboard/student_dashboard.html')
+    project_count = Project.objects.filter(course__department__in=Enrollment.objects.filter(student=request.user).values_list('department', flat=True)).count()
+    submission_count = Submission.objects.filter(student=request.user).count()
+    event_count = EventParticipation.objects.filter(participant=request.user).count()
+    courses_count = Course.objects.filter(department__in=Enrollment.objects.filter(student=request.user).values_list('department', flat=True)).count()
+    
+    recent_enrollments = Enrollment.objects.filter(student=request.user).order_by('-date_enrolled')[:2]
+    recent_submissions = Submission.objects.filter(student=request.user).order_by('-submitted_at')[:2]
+    recent_events = EventParticipation.objects.filter(participant=request.user).order_by('-event__start_date')[:2]
+    
+    context = {
+        "project_count": project_count,
+        "submission_count": submission_count,
+        "event_count": event_count,
+        "courses_count": courses_count,
+        "recent_enrollments": recent_enrollments,
+        "recent_submissions": recent_submissions,
+        "recent_events": recent_events,
+    }
+    return render(request, 'dashboard/student_dashboard.html', context)
 
 def profile(request):
     if request.user.is_authenticated:
@@ -197,7 +242,8 @@ def student_course_list(request):
 def course_details(request, dep_id):
     department = Department.objects.get(id=dep_id)
     courses = Course.objects.filter(department=department).order_by('course_code')
-    IsEnrolled = Enrollment.objects.filter(student=request.user, department=department).exists()
+    enrollment = Enrollment.objects.filter(student=request.user, department=department)
+    IsEnrolled = enrollment.exists()
 
     if not IsEnrolled:
         return redirect('course_enrollment', dep_id=dep_id)
@@ -207,7 +253,8 @@ def course_details(request, dep_id):
     
     return render(request, 'course/course_details.html', {
         'department': department,
-        'courses': courses
+        'courses': courses,
+        'enrollment': enrollment.first() if enrollment else None,
     })
 
 def course_enrollment(request, dep_id):
@@ -276,6 +323,46 @@ def remove_enrollment(request, enrollment_id):
     return redirect('enrollment_management')
 
 @login_required
+def update_enrollment_status(request, enrollment_id):
+    if request.method == 'POST':
+        enrollment = Enrollment.objects.get(id=enrollment_id)
+        enrollment.status = request.POST['status']
+        if enrollment.status == 'completed':
+            enrollment.date_completed = timezone.now().date()
+            enrollment.date_dropped = None
+        elif enrollment.status == 'dropped':
+            enrollment.date_dropped = timezone.now().date()
+            enrollment.date_completed = None
+        else:
+            enrollment.date_completed = None
+            enrollment.date_dropped = None
+        enrollment.save()
+        return redirect('enrollment_management')
+    return redirect('enrollment_management')
+
+@login_required
+def cultural_event_management(request):
+    events = CulturalEvent.objects.all()
+    return render(request, 'admin/cultural_event_management.html', {'events': events})
+
+@login_required
+def delete_event(request, event_id):
+    event = CulturalEvent.objects.get(id=event_id)
+    event.delete()
+    return redirect('cultural_event_management')
+
+@login_required
+def project_management(request):
+    projects = Project.objects.all()
+    return render(request, 'admin/project_management.html', {'projects': projects})
+
+@login_required
+def delete_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    project.delete()
+    return redirect('project_management')
+
+@login_required
 def marks_upload(request):
     enrollments = Enrollment.objects.filter(status='enrolled')
     return render(request, 'marks/marks_upload.html', {'enrollments': enrollments})
@@ -292,6 +379,7 @@ def upload_marks(request, enrollment_id):
             external_marks=request.POST['external_marks'],
             grade=request.POST['grade']
         )
+        messages.success(request, 'Marks uploaded successfully!')
         return redirect('marks_upload')
     return redirect('marks_upload')
 
@@ -304,3 +392,152 @@ def all_marks(request):
 def my_marks(request):
     marks = Mark.objects.filter(enrollment__student=request.user).order_by('semester')
     return render(request, 'marks/my_marks.html', {'marks': marks})
+
+@login_required
+def project_upload(request):
+    if request.method == 'POST':
+        Project.objects.create(
+            title=request.POST['title'],
+            description=request.POST['description'],
+            course_id=request.POST['course'],
+            assigned_date=request.POST['assigned_date'],
+            due_date=request.POST['due_date']
+        )
+        messages.success(request, 'Project uploaded successfully!')
+        return redirect('project_upload')
+    courses = Course.objects.all()
+    return render(request, 'projects/project_upload.html', {'courses': courses})
+
+@login_required
+def project_list(request):
+    if request.user.account.role == 'student':
+        departments = Enrollment.objects.filter(student=request.user).values_list('department', flat=True)
+        projects = Project.objects.filter(course__department__in=departments)
+    else:
+        projects = Project.objects.all()
+    return render(request, 'projects/project_list.html', {'projects': projects})
+
+@login_required
+def submit_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    if request.method == 'POST':
+        Submission.objects.create(
+            student=request.user,
+            project=project,
+            file=request.FILES['file']
+        )
+        messages.success(request, 'Project submitted successfully!')
+        return redirect('project_list')
+    return render(request, 'projects/submit_project.html', {'project': project})
+
+@login_required
+def submission_list(request):
+    submissions = Submission.objects.all().order_by('-submitted_at')
+    return render(request, 'projects/submission_list.html', {'submissions': submissions})
+
+@login_required
+def add_remarks(request, submission_id):
+    if request.method == 'POST':
+        submission = Submission.objects.get(id=submission_id)
+        submission.remarks = request.POST['remarks']
+        submission.save()
+        messages.success(request, 'Remarks added successfully!')
+        return redirect('submission_list')
+    return redirect('submission_list')
+
+@login_required
+def event_upload(request):
+    if request.method == 'POST':
+        CulturalEvent.objects.create(
+            name=request.POST['name'],
+            description=request.POST['description'],
+            start_date=request.POST['start_date'],
+            end_date=request.POST['end_date'],
+            department_id=request.POST['department'],
+            created_by=request.user
+        )
+        messages.success(request, 'Cultural Event added successfully!')
+        return redirect('event_upload')
+    departments = Department.objects.all()
+    return render(request, 'culturals/event_upload.html', {'departments': departments})
+
+@login_required
+def event_list(request):
+    today = timezone.now().date()
+    if request.user.account.role == 'student':
+        events = CulturalEvent.objects.filter(start_date__lte=today, end_date__gte=today)
+    else:
+        events = CulturalEvent.objects.all().order_by('-start_date')
+    return render(request, 'culturals/event_list.html', {'events': events})
+
+@login_required
+def participate_event(request, event_id):
+    event = CulturalEvent.objects.get(id=event_id)
+    if request.method == 'POST':
+        EventParticipation.objects.create(
+            event=event,
+            participant=request.user,
+            role=request.POST['role']
+        )
+        messages.success(request, 'Participated successfully!')
+        return redirect('event_list')
+    return render(request, 'culturals/participate_event.html', {'event': event})
+
+@login_required
+def my_events(request):
+    participations = EventParticipation.objects.filter(participant=request.user)
+    return render(request, 'culturals/my_events.html', {'participations': participations})
+
+@login_required
+def participant_list(request):
+    participations = EventParticipation.objects.filter(event__created_by=request.user)
+    return render(request, 'culturals/participant_list.html', {'participations': participations})
+
+@login_required
+def update_participant_status(request, participation_id):
+    if request.method == 'POST':
+        participation = EventParticipation.objects.get(id=participation_id)
+        participation.status = request.POST['status']
+        participation.feedback = request.POST['feedback']
+        
+        if 'certificate' in request.FILES:
+            participation.certificate = request.FILES['certificate']
+        elif participation.status in ['Participated', 'Won']:
+            # Generate certificate
+            buffer = io.BytesIO()
+            p = canvas.Canvas(buffer, pagesize=letter)
+            p.drawString(100, 750, f"Certificate of {participation.status}")
+            p.drawString(100, 730, f"Presented to {participation.participant.username}")
+            p.drawString(100, 710, f"For {participation.role} in {participation.event.name}")
+            p.showPage()
+            p.save()
+            buffer.seek(0)
+            participation.certificate.save(
+                f"{participation.event.name}_{participation.participant.username}.pdf",
+                ContentFile(buffer.getvalue())
+            )
+            buffer.close()
+        
+        participation.save()
+        messages.success(request, 'Updated!')
+        return redirect('participant_list')
+    return redirect('participant_list')
+
+@login_required
+def feedback_form(request):
+    if request.method == 'POST':
+        Feedback.objects.create(
+            student=request.user,
+            department_id=request.POST['course'],
+            comments=request.POST['comments'],
+            rating=request.POST['rating']
+        )
+        messages.success(request, 'Feedback submitted successfully!')
+        return redirect('my_feedback')
+    departments = Department.objects.all()
+    return render(request, 'feedback/feedback_form.html', {'courses': departments})
+
+@login_required
+def my_feedback(request):
+    feedback_list = Feedback.objects.filter(student=request.user).order_by('-created_at')
+    return render(request, 'feedback/my_feedback.html', {'feedback_list': feedback_list})

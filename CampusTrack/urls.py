@@ -38,9 +38,14 @@ urlpatterns = [
 
     path('course-management/', views.course_management, name='course_management'),
     path('remove-course/<int:course_id>/', views.remove_course, name='remove_course'),
+    path('cultural-event-management/', views.cultural_event_management, name='cultural_event_management'),
+    path('delete-event/<int:event_id>/', views.delete_event, name='delete_event'),
+    path('project-management/', views.project_management, name='project_management'),
+    path('delete-project/<int:project_id>/', views.delete_project, name='delete_project'),
 
     path('enrollment-management/', views.enrollment_management, name='enrollment_management'),
     path('remove-enrollment/<int:enrollment_id>/', views.remove_enrollment, name='remove_enrollment'),
+    path('update-enrollment-status/<int:enrollment_id>/', views.update_enrollment_status, name='update_enrollment_status'),
 
     path('dashboard/profile/', views.profile, name='profile'),
     path('dashboard/student/profile/', views.student_profile, name='student_profile'),
@@ -57,6 +62,24 @@ urlpatterns = [
     path('teacher/upload-marks/<int:enrollment_id>/', views.upload_marks, name='upload_marks'),
     path('teacher/all-marks/', views.all_marks, name='all_marks'),
     path('student/my-marks/', views.my_marks, name='my_marks'),
+
+    path('project-upload/', views.project_upload, name='project_upload'),
+    path('projects/', views.project_list, name='project_list'),
+    path('submit-project/<int:project_id>/', views.submit_project, name='submit_project'),
+    path('submission-list/', views.submission_list, name='submission_list'),
+    path('add-remarks/<int:submission_id>/', views.add_remarks, name='add_remarks'),
+
+    path('event-upload/', views.event_upload, name='event_upload'),
+    path('events/', views.event_list, name='event_list'),
+    path('participate-event/<int:event_id>/', views.participate_event, name='participate_event'),
+    path('my-events/', views.my_events, name='my_events'),
+    path('participant-list/', views.participant_list, name='participant_list'),
+    path('update-participant/<int:participation_id>/', views.update_participant_status, name='update_participant_status'),
+
+    path('department/<int:department_id>/', views.department_detail, name='department_detail'),
+
+    path('feedback/', views.feedback_form, name='feedback_form'),
+    path('my-feedback/', views.my_feedback, name='my_feedback'),
 ]
 
 if settings.DEBUG:

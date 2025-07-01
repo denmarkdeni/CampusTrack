@@ -9,8 +9,8 @@
                 <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                     <i class="fa fa-chart-line fa-3x text-primary"></i>
                     <div class="ms-3">
-                        <p class="mb-2">Labworks</p>
-                        <h6 class="mb-0">10000+</h6>
+                        <p class="mb-2">Total Projects</p>
+                        <h6 class="mb-0">{{ project_count }}</h6>
                     </div>
                 </div>
             </div>
@@ -18,8 +18,8 @@
                 <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                     <i class="fa fa-chart-bar fa-3x text-primary"></i>
                     <div class="ms-3">
-                        <p class="mb-2">Attendance</p>
-                        <h6 class="mb-0">200+</h6>
+                        <p class="mb-2">Submissions</p>
+                        <h6 class="mb-0">{{ submission_count }} submitted</h6>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <i class="fa fa-chart-area fa-3x text-primary"></i>
                     <div class="ms-3">
                         <p class="mb-2"> Cultural Events</p>
-                        <h6 class="mb-0">100+</h6>
+                        <h6 class="mb-0">{{ event_count }} attended</h6>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     <i class="fa fa-chart-pie fa-3x text-primary"></i>
                     <div class="ms-3">
                         <p class="mb-2">Total Courses</p>
-                        <h6 class="mb-0">200+</h6>
+                        <h6 class="mb-0">{{ courses_count }}</h6>
                     </div>
                 </div>
             </div>
@@ -72,78 +72,129 @@
     <!-- Sales Chart End -->
 
 
-    <!-- Recent Sales Start -->
+    <!-- Recent Activities start -->
     <div class="container-fluid pt-4 px-4">
-        <div class="bg-secondary text-center rounded p-4">
+        <!-- Recent Enrollments -->
+        <div class="bg-secondary text-center rounded p-4 mb-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
-                <h6 class="mb-0">Recent Activities</h6>
-                <a href="">Show All</a>
+                <h6 class="mb-0">Recent Enrollments</h6>
+                <a href="{% url 'student_course_list' %}">Show All</a>
             </div>
             <div class="table-responsive">
                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                         <tr class="text-white">
-                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Invoice</th>
-                            <th scope="col">Customer</th>
-                            <th scope="col">Amount</th>
+                            <th scope="col">/</th>
+                            <th scope="col">Department</th>
+                            <th scope="col">Academic Year</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date Enrolled</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recent_enrollments %}
+                            {% for enrollment in recent_enrollments %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ enrollment.department.name }}</td>
+                                <td>{{ enrollment.academic_year }}</td>
+                                <td>{{ enrollment.status|capfirst }}</td>
+                                <td>{{ enrollment.date_enrolled }}</td>
+                                <td><a class="btn btn-sm btn-primary" href="{% url 'student_course_list' %}">Detail</a></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">No Recent Enrollments</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    
+        <!-- Recent Project Submissions -->
+        <div class="bg-secondary text-center rounded p-4 mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h6 class="mb-0">Recent Project Submissions</h6>
+                <a href="{% url 'dashboard' %}">Show All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-white">
+                            <th scope="col">/</th>
+                            <th scope="col">Project Title</th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Submitted At</th>
+                            <th scope="col">Remarks</th>
+                            {% comment %} <th scope="col">Action</th> {% endcomment %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recent_submissions %}
+                            {% for submission in recent_submissions %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ submission.project.title }}</td>
+                                <td>{{ submission.project.course.course_name }}</td>
+                                <td>{{ submission.submitted_at }}</td>
+                                <td>{{ submission.remarks|default:"None" }}</td>
+                                {% comment %} <td><a class="btn btn-sm btn-primary" href="{% url 'submission_list' %}">Detail</a></td> {% endcomment %}
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">No Recent Submissions</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    
+        <!-- Recent Events Attended -->
+        <div class="bg-secondary text-center rounded p-4 mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h6 class="mb-0">Recent Events Attended</h6>
+                <a href="{% url 'my_events' %}">Show All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-white">
+                            <th scope="col">/</th>
+                            <th scope="col">Event Name</th>
+                            <th scope="col">Department</th>
+                            <th scope="col">Role</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>01 Jan 2025</td>
-                            <td>INV-9123</td>
-                            <td>Kevin </td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>09 Mar 2024</td>
-                            <td>INV-2113</td>
-                            <td>Jacob Dye</td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>28 Aug 2025</td>
-                            <td>INV-3231</td>
-                            <td>Adam Rose</td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>07 Jun 2025</td>
-                            <td>INV-6597</td>
-                            <td>Lilly</td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>06 Dec 2025</td>
-                            <td>INV-0123</td>
-                            <td>Benny Ray</td>
-                            <td>Rs 15000</td>
-                            <td>Paid</td>
-                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                        </tr>
+                        {% if recent_events %}
+                            {% for participation in recent_events %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ participation.event.name }}</td>
+                                <td>{{ participation.event.department.name|default:"None" }}</td>
+                                <td>{{ participation.role }}</td>
+                                <td>{{ participation.status }}</td>
+                                <td><a class="btn btn-sm btn-primary" href="{% url 'my_events' %}">Detail</a></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">No Recent Events</td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <!-- Recent Sales End -->
+    <!-- Recent Activities End -->
 
 
      <!-- Widgets Starts -->

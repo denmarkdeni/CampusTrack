@@ -27,9 +27,21 @@
                             <td>{{ enrollment.student.username }}</td>
                             <td>{{ enrollment.department.name }}</td>
                             <td>{{ enrollment.academic_year }}</td>
-                            <td>{{ enrollment.status|capfirst }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'update_enrollment_status' enrollment.id %}">
+                                    {% csrf_token %}
+                                    <select name="status" class="form-select">
+                                        <option value="enrolled" {% if enrollment.status == 'enrolled' %}selected{% endif %}>Enrolled</option>
+                                        <option value="completed" {% if enrollment.status == 'completed' %}selected{% endif %}>Completed</option>
+                                        <option value="dropped" {% if enrollment.status == 'dropped' %}selected{% endif %}>Dropped</option>
+                                    </select>
+                            </td>
                             <td>{{ enrollment.date_enrolled }}</td>
-                            <td><a class="btn btn-sm btn-danger" href="{% url 'remove_enrollment' enrollment.id %}">Remove</a></td>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                <a class="btn btn-sm btn-danger" href="{% url 'remove_enrollment' enrollment.id %}">Remove</a>
+                            </td>
+                            </form>
                         </tr>
                         {% endfor %}
                     {% else %}

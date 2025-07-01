@@ -30,7 +30,7 @@
                   <td>{{ course.year }}</td>
                   <td>{{ course.semester }}</td>
                   <td>{{ course.teacher.teacherprofile.full_name }}</td>
-                  <td>{{ course.teacher.teacherprofile.full_name }}</td>
+                  <td>{{ enrollment.status }}</td>
                 </tr>
                 {% endfor %}        
               </tbody>
@@ -41,4 +41,16 @@
     </div>
   </div>
 </div>
+<div class="container-fluid position-relative d-flex p-0">
+  {% if enrollment.status == 'completed' %}
+  <div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+      <h6 class="mb-4">Course Completed</h6>
+      <p>You have successfully completed this course.</p>
+      <a href="{% url 'feedback_form' %}" class="btn btn-primary">Feedback</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
 {% endblock %}

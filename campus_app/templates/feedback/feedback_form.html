@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Submit Feedback</h6>
+            <a href="{% url 'my_feedback' %}">View My Feedback</a>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="course" class="form-label text-white">Course</label>
+                <select name="course" class="form-select" required>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="comments" class="form-label text-white">Comments</label>
+                <textarea name="comments" class="form-control" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label text-white">Rating (1-5)</label>
+                <select name="rating" class="form-select" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

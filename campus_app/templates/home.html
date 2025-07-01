@@ -139,25 +139,25 @@
                     <div class="row pt-3 mx-0">
                         <div class="col-3 px-0">
                             <div class="bg-success text-center p-4">
-                                <h1 class="text-white" data-toggle="counter-up">7</h1>
+                                <h1 class="text-white" data-toggle="counter-up">{{ courses }}</h1>
                                 <h6 class="text-uppercase text-white">Available<span class="d-block">Courses</span></h6>
                             </div>
                         </div>
                         <div class="col-3 px-0">
                             <div class="bg-primary text-center p-4">
-                                <h1 class="text-white" data-toggle="counter-up">15</h1>
+                                <h1 class="text-white" data-toggle="counter-up">{{ culturals }}</h1>
                                 <h6 class="text-uppercase text-white">Cultural<span class="d-block">Events</span></h6>
                             </div>
                         </div>
                         <div class="col-3 px-0">
                             <div class="bg-secondary text-center p-4">
-                                <h1 class="text-white" data-toggle="counter-up">25</h1>
+                                <h1 class="text-white" data-toggle="counter-up">{{ teachers }}</h1>
                                 <h6 class="text-uppercase text-white">Skilled<span class="d-block">Teachers</span></h6>
                             </div>
                         </div>
                         <div class="col-3 px-0">
                             <div class="bg-warning text-center p-4">
-                                <h1 class="text-white" data-toggle="counter-up">999</h1>
+                                <h1 class="text-white" data-toggle="counter-up">{{ students }}</h1>
                                 <h6 class="text-uppercase text-white">Happy<span class="d-block">Students</span></h6>
                             </div>
                         </div>
@@ -229,134 +229,25 @@
             </div>
         </div>
         <div class="owl-carousel courses-carousel">
+            {% for department in departments %}
             <div class="courses-item position-relative">
-                <img class="img-fluid" src="static/home/img/courses-1.jpg" alt="">
+                <img class="img-fluid" src="static/home/img/courses-{{ forloop.counter }}.jpg" alt="{{ department.name }}">
                 <div class="courses-text">
-                    <h4 class="text-center text-white px-3">Bsc Computer Science</h4>
+                    <h4 class="text-center text-white px-3">{{ department.name }}</h4>
                     <div class="border-top w-100 mt-3">
                         <div class="d-flex justify-content-between p-4">
-                            <span class="text-white"><i class="fa fa-user mr-2"></i>Jhon Doe</span>
-                            <span class="text-white"><i class="fa fa-star mr-2"></i>4.5 <small>(250)</small></span>
+                            <span class="text-white"><i class="fa fa-book mr-2"></i>{{ department.subjects }} Subjects</span>
+                            <span class="text-white"><i class="fa fa-graduation-cap mr-2"></i>{{ department.degree.name }}</span>
                         </div>
                     </div>
-                    <div class="w-100 bg-white text-center p-4" >
-                        <a class="btn btn-primary" href="detail.html">Course Detail</a>
+                    <div class="w-100 bg-white text-center p-4">
+                        <a class="btn btn-primary" href="{% url 'department_detail' department.id %}">Department Detail</a>
                     </div>
                 </div>
             </div>
-            <div class="courses-item position-relative">
-                <img class="img-fluid" src="static/home/img/courses-2.jpg" alt="">
-                <div class="courses-text">
-                    <h4 class="text-center text-white px-3">AI Learning</h4>
-                    <div class="border-top w-100 mt-3">
-                        <div class="d-flex justify-content-between p-4">
-                            <span class="text-white"><i class="fa fa-user mr-2"></i>Jacob K</span>
-                            <span class="text-white"><i class="fa fa-star mr-2"></i>4.0 <small>(122)</small></span>
-                        </div>
-                    </div>
-                    <div class="w-100 bg-white text-center p-4" >
-                        <a class="btn btn-primary" href="detail.html">Course Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="courses-item position-relative">
-                <img class="img-fluid" src="static/home/img/courses-3.jpg" alt="">
-                <div class="courses-text">
-                    <h4 class="text-center text-white px-3">Bsc Electronics</h4>
-                    <div class="border-top w-100 mt-3">
-                        <div class="d-flex justify-content-between p-4">
-                            <span class="text-white"><i class="fa fa-user mr-2"></i>Grace Smith</span>
-                            <span class="text-white"><i class="fa fa-star mr-2"></i>4.1 <small>(188)</small></span>
-                        </div>
-                    </div>
-                    <div class="w-100 bg-white text-center p-4" >
-                        <a class="btn btn-primary" href="detail.html">Course Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="courses-item position-relative">
-                <img class="img-fluid" src="static/home/img/courses-4.jpg" alt="">
-                <div class="courses-text">
-                    <h4 class="text-center text-white px-3">Software Engineering</h4>
-                    <div class="border-top w-100 mt-3">
-                        <div class="d-flex justify-content-between p-4">
-                            <span class="text-white"><i class="fa fa-user mr-2"></i>Eric Jr</span>
-                            <span class="text-white"><i class="fa fa-star mr-2"></i>4.4 <small>(200)</small></span>
-                        </div>
-                    </div>
-                    <div class="w-100 bg-white text-center p-4" >
-                        <a class="btn btn-primary" href="detail.html">Course Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="courses-item position-relative">
-                <img class="img-fluid" src="static/home/img/courses-5.jpg" alt="">
-                <div class="courses-text">
-                    <h4 class="text-center text-white px-3">Digital Marketing</h4>
-                    <div class="border-top w-100 mt-3">
-                        <div class="d-flex justify-content-between p-4">
-                            <span class="text-white"><i class="fa fa-user mr-2"></i>Daniel Bush</span>
-                            <span class="text-white"><i class="fa fa-star mr-2"></i>4.6 <small>(300)</small></span>
-                        </div>
-                    </div>
-                    <div class="w-100 bg-white text-center p-4" >
-                        <a class="btn btn-primary" href="detail.html">Course Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="courses-item position-relative">
-                <img class="img-fluid" src="static/home/img/courses-6.jpg" alt="">
-                <div class="courses-text">
-                    <h4 class="text-center text-white px-3">Diploma in Data entry</h4>
-                    <div class="border-top w-100 mt-3">
-                        <div class="d-flex justify-content-between p-4">
-                            <span class="text-white"><i class="fa fa-user mr-2"></i>Steve II</span>
-                            <span class="text-white"><i class="fa fa-star mr-2"></i>3.9 <small>(252)</small></span>
-                        </div>
-                    </div>
-                    <div class="w-100 bg-white text-center p-4" >
-                        <a class="btn btn-primary" href="detail.html">Course Detail</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-        <!-- <div class="row justify-content-center bg-image mx-0 mb-5">
-            <div class="col-lg-6 py-5">
-                <div class="bg-white p-5 my-5">
-                    <h1 class="text-center mb-4">30% Off For New Students</h1>
-                    <form>
-                        <div class="form-row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <input type="text" class="form-control bg-light border-0" placeholder="Your Name" style="padding: 30px 20px;">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <input type="email" class="form-control bg-light border-0" placeholder="Your Email" style="padding: 30px 20px;">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <select class="custom-select bg-light border-0 px-3" style="height: 60px;">
-                                        <option selected>Select A courses</option>
-                                        <option value="1">courses 1</option>
-                                        <option value="2">courses 1</option>
-                                        <option value="3">courses 1</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <button class="btn btn-primary btn-block" type="submit" style="height: 60px;">Sign Up Now</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> -->
+    </div> 
     <!-- Courses End -->
 
 
@@ -368,11 +259,12 @@
                 <h1 class="display-4">Meet Our Instructors</h1>
             </div>
             <div class="owl-carousel team-carousel position-relative" style="padding: 0 30px;">
+                {% for teacher in teachers_list %}
                 <div class="team-item">
-                    <img class="img-fluid w-100" src="static/home/img/team-1.jpg" alt="">
+                    <img class="img-fluid w-100" src="{{ teacher.user.account.profile_pic.url }}" alt="">
                     <div class="bg-light text-center p-4">
-                        <h5 class="mb-3">Instructor Name</h5>
-                        <p class="mb-2">Web Design & Development</p>
+                        <h5 class="mb-3">{{ teacher.full_name }}</h5>
+                        <p class="mb-2">{{ teacher.qualification }} & {{ teacher.department }}</p>
                         <div class="d-flex justify-content-center">
                             <a class="mx-1 p-1" href="#"><i class="fab fa-twitter"></i></a>
                             <a class="mx-1 p-1" href="#"><i class="fab fa-facebook-f"></i></a>
@@ -382,48 +274,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="team-item">
-                    <img class="img-fluid w-100" src="static/home/img/team-2.jpg" alt="">
-                    <div class="bg-light text-center p-4">
-                        <h5 class="mb-3">Instructor Name</h5>
-                        <p class="mb-2">Web Design & Development</p>
-                        <div class="d-flex justify-content-center">
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-instagram"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="team-item">
-                    <img class="img-fluid w-100" src="static/home/img/team-3.jpg" alt="">
-                    <div class="bg-light text-center p-4">
-                        <h5 class="mb-3">Instructor Name</h5>
-                        <p class="mb-2">Web Design & Development</p>
-                        <div class="d-flex justify-content-center">
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-instagram"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="team-item">
-                    <img class="img-fluid w-100" src="static/home/img/team-4.jpg" alt="">
-                    <div class="bg-light text-center p-4">
-                        <h5 class="mb-3">Instructor Name</h5>
-                        <p class="mb-2">Web Design & Development</p>
-                        <div class="d-flex justify-content-center">
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-instagram"></i></a>
-                            <a class="mx-1 p-1" href="#"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -452,29 +303,19 @@ With features like real-time notifications, easy access to academic records, and
                 </div>
                 <div class="col-lg-7">
                     <div class="owl-carousel testimonial-carousel">
+                        {% for feed in feedback %}
                         <div class="bg-white p-5">
                             <i class="fa fa-3x fa-quote-left text-primary mb-4"></i>
-                            <p>"I used to miss updates about technical fests and lab submissions. Now with this system, I get real-time notifications 
-                                and everything is organized in one place. Totally recommend it!"</p>
+                            <p>"{{ feed.comments }}"</p>
                             <div class="d-flex flex-shrink-0 align-items-center mt-4">
-                                <img class="img-fluid mr-4" src="static/home/img/testimonial-2.jpg" alt="">
+                                <img class="img-fluid mr-4" src="{{ feed.student.account.profile_pic.url }}" alt="">
                                 <div>
-                                    <h5>Goerge</h5>
-                                    <span>B.Sc. Elecronics</span>
+                                    <h5>{{ feed.student.username }}</h5>
+                                    <span>{{ feed.department.name }}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white p-5">
-                            <i class="fa fa-3x fa-quote-left text-primary mb-4"></i>
-                            <p>"This platform has completely changed how I manage my academic life. I can access my course materials, check grades, and keep track of cultural events—it's all so smooth and efficient!"</p>
-                            <div class="d-flex flex-shrink-0 align-items-center mt-4">
-                                <img class="img-fluid mr-4" src="static/home/img/testimonial-1.jpg" alt="">
-                                <div>
-                                    <h5>Julie</h5>
-                                    <span>B.Sc. Computer Science</span>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Cultural Event Management</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col">/</th>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Created By</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if events %}
+                        {% for event in events %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ event.name }}</td>
+                            <td>{{ event.department.name|default:"None" }}</td>
+                            <td>{{ event.start_date }}</td>
+                            <td>{{ event.end_date }}</td>
+                            <td>{{ event.created_by.username|default:"None" }}</td>
+                            <td><a class="btn btn-sm btn-danger" href="{% url 'delete_event' event.id %}">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">No Events Found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

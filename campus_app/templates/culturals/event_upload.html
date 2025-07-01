@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Upload Cultural Event</h6>
+            <a href="">Show All</a>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label text-white">Event Name</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label text-white">Description</label>
+                <textarea name="description" class="form-control" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="start_date" class="form-label text-white">Start Date</label>
+                <input type="date" name="start_date" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="end_date" class="form-label text-white">End Date</label>
+                <input type="date" name="end_date" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="department" class="form-label text-white">Department</label>
+                <select name="department" class="form-select" required>
+                    {% for dept in departments %}
+                        <option value="{{ dept.id }}">{{ dept.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary">Upload Event</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

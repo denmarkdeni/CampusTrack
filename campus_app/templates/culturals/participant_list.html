@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Event Participants</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col">/</th>
+                        <th scope="col">Participant</th>
+                        <th scope="col">Event</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Feedback</th>
+                        <th scope="col">Certificate</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if participations %}
+                        {% for participation in participations %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ participation.participant.username }}</td>
+                            <td>{{ participation.event.name }}</td>
+                            <td>{{ participation.role }}</td>
+
+                        <form method="POST" action="{% url 'update_participant_status' participation.id %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <td>
+                                    <select name="status" class="form-select">
+                                        <option value="Participated" {% if participation.status == 'Participated' %}selected{% endif %}>Participated</option>
+                                        <option value="Won" {% if participation.status == 'Won' %}selected{% endif %}>Won</option>
+                                        <option value="Defeated" {% if participation.status == 'Defeated' %}selected{% endif %}>Defeated</option>
+                                    </select>
+                            </td>
+                            <td>
+                                <input type="text" name="feedback" value="{{ participation.feedback }}" class="form-control">
+                            </td>
+                            <td>
+                                <input type="file" name="certificate" class="form-control">
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </td>
+                            
+                        </form>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center">No Participants Found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

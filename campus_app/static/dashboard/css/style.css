@@ -290,3 +290,7 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }

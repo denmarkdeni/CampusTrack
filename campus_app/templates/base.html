@@ -63,29 +63,12 @@
                     
                     {% if request.user.is_superuser %}
 
-                    <!-- <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
-                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.html" class="dropdown-item">Buttons</a>
-                            <a href="typography.html" class="dropdown-item">Typography</a>
-                            <a href="element.html" class="dropdown-item">Other Elements</a>
-                        </div> 
-                    </div> -->
                     <a href="{% url 'user_management' %}" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Users</a>
                     <a href="{% url 'course_management' %}" class="nav-item nav-link"><i class="fa fa-book me-2"></i>Courses</a>
                     <a href="{% url 'enrollment_management' %}" class="nav-item nav-link"><i class="fa fa-university me-2"></i>Enrollments</a>
-                    <a href="{% url 'dashboard' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Culturals</a>
-                     <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a> -->
-                    <!-- <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
-                         <div class="dropdown-menu bg-transparent border-0"> 
-                            <a href="signin.html" class="dropdown-item">Sign In</a>
-                            <a href="signup.html" class="dropdown-item">Sign Up</a>
-                            <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item">Blank Page</a>
-                        </div>
-                    </div>  -->
-
+                    <a href="{% url 'project_management' %}" class="nav-item nav-link"><i class="fa fa-glasses me-2"></i>Projects</a>
+                    <a href="{% url 'cultural_event_management' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Culturals</a>
+                    
                     {% elif request.user.account.role == 'teacher' %}
 
                     <a href="{% url 'teacher_profile' %}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Profile</a>
@@ -103,7 +86,22 @@
                             <a href="{% url 'all_marks' %}" class="dropdown-item">💨 marks List</a>
                         </div>
                     </div>
-                    <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Feedback</a> 
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-hourglass-end me-2"></i>Projects</a>
+                        <div class="dropdown-menu bg-transparent border-0"> 
+                            <a href="{% url 'project_upload' %}" class="dropdown-item">💨 Upload Project</a>
+                            <a href="{% url 'project_list' %}" class="dropdown-item">💨 Projects List</a>
+                            <a href="{% url 'submission_list' %}" class="dropdown-item">💨 Submissions List</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-paint-brush me-2"></i>Cultural Events</a>
+                        <div class="dropdown-menu bg-transparent border-0"> 
+                            <a href="{% url 'event_upload' %}" class="dropdown-item">💨 Upload Event</a>
+                            <a href="{% url 'event_list' %}" class="dropdown-item">💨 Events List</a>
+                            <a href="{% url 'participant_list' %}" class="dropdown-item">💨 Participants List</a>
+                        </div>
+                    </div>
                     {% comment %} <a href="{% url 'marks_upload' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Valuation</a> {% endcomment %}
                     {% comment %} <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Course </a> {% endcomment %}
                     
@@ -113,13 +111,25 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Course</a>
                          <div class="dropdown-menu bg-transparent border-0"> 
-                            <a href="{% url 'student_course_list' %}" class="dropdown-item">My Courses</a>
-                            <a href="{% url 'all_courses' %}" class="dropdown-item">All Courses</a>
-                            <a href="{% url 'my_marks' %}" class="dropdown-item">My Marks</a>
+                            <a href="{% url 'student_course_list' %}" class="dropdown-item">💨 My Courses</a>
+                            <a href="{% url 'all_courses' %}" class="dropdown-item">💨 All Courses</a>
+                            <a href="{% url 'my_marks' %}" class="dropdown-item">💨 My Marks</a>
                         </div>
                     </div>
-                    <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Cultural Events </a>
-                    <a href="{% url 'student_profile' %}" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Lab Work</a> 
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-hourglass-end me-2"></i>Projects</a>
+                        <div class="dropdown-menu bg-transparent border-0"> 
+                            <a href="{% url 'project_list' %}" class="dropdown-item">💨 Projects List</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-paint-brush me-2"></i>Cultural Events</a>
+                        <div class="dropdown-menu bg-transparent border-0"> 
+                            <a href="{% url 'event_list' %}" class="dropdown-item">💨 All Events</a>
+                            <a href="{% url 'my_events' %}" class="dropdown-item">💨 My Events</a>
+                        </div>
+                    </div>
+                    <a href="{% url 'my_feedback' %}" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Feedback</a> 
 
                     {% endif %}
 

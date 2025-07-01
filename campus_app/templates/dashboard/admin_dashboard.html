@@ -95,7 +95,7 @@
                         {% if enrollments %}
                             {% for enroll in enrollments %}
                             <tr>
-                                <td> {{ forloop.counter1 }} </td>
+                                <td> {{ forloop.counter }} </td>
                                 <td>{{ enroll.date_enrolled }}</td>
                                 <td>{{ enroll.department.name }}</td>
                                 <td>{{ enroll.student.username }} </td>

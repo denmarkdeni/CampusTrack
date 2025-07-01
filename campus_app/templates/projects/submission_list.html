@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Project Submissions</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col">/</th>
+                        <th scope="col">Student</th>
+                        <th scope="col">Project</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Submitted At</th>
+                        <th scope="col">File</th>
+                        <th scope="col">Remarks</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if submissions %}
+                        {% for submission in submissions %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ submission.student.username }}</td>
+                            <td>{{ submission.project.title }}</td>
+                            <td>{{ submission.project.course.course_name }}</td>
+                            <td>{{ submission.submitted_at }}</td>
+                            <td><a href="{{ submission.file.url }}" class="btn btn-sm btn-info" target="_blank">Download</a></td>
+                            <td>
+                                <form method="POST" action="{% url 'add_remarks' submission.id %}">
+                                    {% csrf_token %}
+                                    <input type="text" name="remarks" value="{{ submission.remarks }}" class="form-control">
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-primary">Save Remarks</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center">No Submissions Found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
